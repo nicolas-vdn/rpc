@@ -63,7 +63,7 @@ bool checkInPlays(char element[7]) {
     }
 
     if (!exists) {
-        printf("Saisie invalide !");
+        printf("Saisie invalide !\n");
     }
 
     return exists;
@@ -90,7 +90,7 @@ void launchGame() {
     wins[1] = 0;
 
     do {
-        printf("Entrez le nombre de manches souhaites : ");
+        printf("Entrez le nombre de manches souhaites (entre 1 et 20) : ");
         scanf("%d", &rounds);
     } while(rounds < 1 || rounds > MAX);
 
@@ -99,16 +99,31 @@ void launchGame() {
     }
 
     if (wins[0] > wins[1]) {
-        printf("Victoire du joueur !");
+        printf("Victoire du joueur !\n");
     } else if (wins[1] > wins[0]) {
-        printf("Victoire de la machine !");
+        printf("Victoire de la machine !\n");
     } else {
-        printf("Egalite parfaite !");
+        printf("Egalite parfaite !\n");
     }
 }
 
 int main() {
-   launchGame();
+    bool willPlay;
+    char doesPlay[3];
+    char result[3];
+    do {
+        launchGame();
+
+        printf("Voulez-vous rejouer ? Entrez 'Oui' pour relancer une partie ou 'Non' pour terminer le jeu.\n");
+        scanf("%s", doesPlay);
+        willPlay = is(strtolower(result, doesPlay), "oui");
+
+        if (willPlay) {
+            printf("Nouvelle partie !\n");
+        } else {
+            printf("Fin du programme.");
+        }
+    } while (willPlay);
 
     return 0;
 }
