@@ -44,6 +44,8 @@ char* checkWin(char* play, char enemy[7]) {
         winner = "joueur";
     } else if (is(play, "feuille") && is(enemy, "pierre")) {
         winner = "joueur";
+    } else if (is(play, "ciseaux") && is(enemy, "feuille")) {
+        winner = "joueur";
     } else {
         winner = "machine";
     }
@@ -72,7 +74,6 @@ void launchRound() {
     char result[7];
     int randnum = (rand() % 3);
     char* enemy = plays[randnum];
-    printf("%d", randnum);
     do {
         printf("Entrez votre jeu parmi 'pierre', 'feuille' et 'ciseaux' : ");
         scanf("%s", play);
