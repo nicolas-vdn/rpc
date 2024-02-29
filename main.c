@@ -18,49 +18,45 @@ bool is(char* str1, char* str2) {
     return strcmp(str1, str2) == 0;
 }
 
-void updateWins(char winner[7]) {
-    if (is(winner, "joueur")) {
-        printf("Le joueur a gagne cette manche !\n");
-        wins[0] += 1;
-    } else if (is(winner, "machine")) {
-        printf("La machine a gagne cette manche !\n");
-        wins[1] += 1;
-    } else {
-        printf("Egalite !\n");
-    }
-
-    printf("Nombre de victoires du joueur : %d\n", wins[0]);
-    printf("Nombre de victoires de la machine : %d\n", wins[1]);
+void recapWin() {
+    printf("Nombre de manches gagnees par le joueur : %d\n", wins[0]);
+    printf("Nombre de manches gagnees par la machine : %d\n", wins[1]);
 }
 
-char* checkWin(char* play, char enemy[7]) {
-    printf("Le joueur a joue %s\n", play);
-    printf("La machine a joue %s\n", enemy);
+void checkWin(int joueur, int enemy) {
+    printf("Le joueur a joue %s\n", plays[joueur]);
+    printf("La machine a joue %s\n", plays[enemy]);
+    int diff = joueur - enemy;
 
-    char* winner;
-    if (is(play, enemy)) {
-        winner = "none";
-    } else if (is(play,"pierre") && is(enemy,"ciseaux")) {
-        winner = "joueur";
-    } else if (is(play, "feuille") && is(enemy, "pierre")) {
-        winner = "joueur";
-    } else if (is(play, "ciseaux") && is(enemy, "feuille")) {
-        winner = "joueur";
+    if (diff == 0) {
+        printf("Egalite !\n");
+    } else if (diff > 0 || diff == 2) {
+        printf("Le joueur a gagne cette manche !\n");
+        wins[0] += 1;
     } else {
-        winner = "machine";
+        printf("La machine a gagne cette manche !\n");
+        wins[1] += 1;
+    }
+}
+
+int findId(char element[7]) {
+    char result[7];
+    int index = -1;
+
+    for (int i = 0; i < 3; i++) {
+        if (is(strtolower(result, element), plays[i])) {
+            index = i;
+            break;
+        }
     }
 
-    return winner;
+    return index;
 }
 
 bool checkInPlays(char element[7]) {
-    char result[7];
     bool exists = false;
-    for (int i = 0; i < 3; i++) {
-        if (is(strtolower(result, element), plays[i])) {
-            exists = true;
-        }
-    }
+    exists = findId(element) > -1;
+    
 
     if (!exists) {
         printf("Saisie invalide !\n");
@@ -71,17 +67,19 @@ bool checkInPlays(char element[7]) {
 
 void launchRound() {
     char play[7];
-    char result[7];
-    int randnum = (rand() % 3);
-    char* enemy = plays[randnum];
+    int enemy = (rand() % 3);
+    int joueur;
+
     do {
         printf("Entrez votre jeu parmi 'pierre', 'feuille' et 'ciseaux' : ");
         scanf("%s", play);
     } while (!checkInPlays(play));
 
-    char* winner = checkWin(strtolower(result, play), enemy);
+    joueur = findId(play);
 
-    updateWins(winner);
+    checkWin(joueur, enemy);
+
+    recapWin();
 }
 
 void launchGame() {
